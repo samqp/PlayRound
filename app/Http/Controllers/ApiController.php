@@ -30,26 +30,7 @@ public function verificarregistro(Request $request)
     {
 
     $resp='ya registrado';
-    $method = $request->method();
-    if($method == 'POST') {
-            
-     $socialProfile=Informacion::firstOrNew(['id_gmail'=>$request->input('id_gmail')]);
-    //Verificamos que el correo electronico de la red social no esta registrado
     
-
-
-	    if($socialProfile->exists){
-	      $fk_id=$socialProfile->id_informacion;
-	      $estudiante=Estudiante::firstOrNew(['fk_id_informacion'=>$fk_id]);
-	    }
-     
-	    if(!$socialProfile->exists or !$estudiante->exists){
-	                  
-
-	                  $resp='no registrado';
-	          }
-         
-        }
 
        return $resp;
 }

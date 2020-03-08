@@ -19,10 +19,11 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
-        'http://192.168.1.69/PlayRound/public/registroalumnomovil',
-        'http://192.168.1.69/PlayRound/public/verificarregistro',
-        'http://192.168.1.69/PlayRound/public/verificarconexion',
+        
+      
+          'http://192.168.0.4/PlayRound/public/verificarconexion',
+          'http://192.168.0.4/PlayRound/public/verificarregistro',
+          'http://192.168.0.4/PlayRound/public/registroalumnomovil',
 
     ];
 }
