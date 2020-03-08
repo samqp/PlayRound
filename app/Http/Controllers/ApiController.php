@@ -36,8 +36,6 @@ public function verificarregistro(Request $request)
      $socialProfile=Informacion::firstOrNew(['id_gmail'=>$request->input('id_gmail')]);
     //Verificamos que el correo electronico de la red social no esta registrado
     
-
-
 	    if($socialProfile->exists){
 	      $fk_id=$socialProfile->id_informacion;
 	      $estudiante=Estudiante::firstOrNew(['fk_id_informacion'=>$fk_id]);
@@ -151,46 +149,37 @@ public function registroalumnoweb(Request $request){
 
 
     $resp='ya registrado';
-    $socialUser=Socialite::driver('google')->user();
-      dd('entra22');
-    dd($socialUser);
-   
-   
-    //Agregar campos faltantes en la tabla users
-    //Verificar si el identificador de la red social  esta registrado
-    $socialProfile=Informacion::firstOrNew(['id_gmail'=>$socialUser->getId()]);
+    if($request->token){
+         $socialUser= Socialite::driver('google')->userFromToken($request->token);
+        //dd($socialUser);
+        $nombrecompleto= explode(" ",$socialUser->getName());
 
+            $info = Informacion::create([
+                'nombre'=> $nombrecompleto[0],
+                'apellido_p'=>$nombrecompleto[1],
+                'apellido_m'=>$nombrecompleto[2],
+                'correo'=> $socialUser->getEmail(),
+                'id_gmail'=>$socialUser->getId(),
 
-if(!$socialProfile->exists){
-dd('entroooooooooooo');
-$nombrecompleto= explode(" ",$socialUser->getName());
+            ]); 
 
-        $info = Informacion::create([
-            'nombre'=> $nombrecompleto[0],
-            'apellido_p'=>$nombrecompleto[1],
-            'apellido_m'=>$nombrecompleto[2],
-            'correo'=> $socialUser->getEmail(),
-            'id_gmail'=>$socialUser->getId(),
+        $resp='registro infor';
+        $infos= DB::table('informacions')->select('id_informacion')->where('id_gmail','=',$socialUser->getId())->first();
+      
+         Estudiante::create([
+                'fk_id_informacion'=>$infos->id_informacion,
+                'matricula'=>$request->input('matricula'),
+                'carrera'=>$request->input('carrera'),
+                'nickname'=> $request->input('nickname'),
 
-        ]); 
+            ]); 
 
-    $resp='registro infor';
-    $infos= DB::table('informacions')->select('id_informacion')->where('id_gmail','=',$socialUser->getId())->first();
-  
-     Estudiante::create([
-            'fk_id_informacion'=>$infos->id_informacion,
-            'matricula'=>$request->input('matricula'),
-            'carrera'=>$request->input('carrera'),
-            'nickname'=> $request->input('nickname'),
-
-        ]); 
-
-    $resp='registro estu';
+        $resp='registro estu';
     
-
-    }
-
-         return $resp;
+         return \Redirect::to('/homeStudent');
+    }// tendriamos que hacer un si no para decir que no existe la informacion de google
+  
+   
 
     }
 
@@ -205,30 +194,14 @@ public function handleCallback(){
    
     $socialUser=Socialite::driver('google')->user();
     //dd($socialUser);
-   
-   
+   $token=$socialUser->token;
     //Agregar campos faltantes en la tabla users
     //Verificar si el identificador de la red social  esta registrado
     $socialProfile=Informacion::firstOrNew(['id_gmail'=>$socialUser->getId()]);
-    //Verificamos que el correo electronico de la red social no esta registrado
-    $informacion=Informacion::firstOrNew(['correo'=>$socialUser->getEmail()]);
     // si el social id no existe
     if(!$socialProfile->exists){
-        return view('seleccion');
-    // si el correo no existe  
-    if(!$informacion->exists){
-    // si no existe obtenemos el usuario y correo
-    $informacion->nombre=$socialUser->getName();
-    $informacion->apellido_p='qui';
-    $informacion->apellido_m='pe';
-    $informacion->correo=$socialUser->getEmail();
-    }
-    //guardamos el avatar, id y nombre de la red social
-    //$user->avatar=$socialUser->getAvatar();
-    $informacion->id_gmail=$socialUser->getId();
-   
-   
-    $informacion->save();
+        return view('seleccion', compact('token'));
+       //return View::make('seleccion',$socialUser);
     }
    
     //Auth::login($informacion);

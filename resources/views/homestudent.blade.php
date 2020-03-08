@@ -6,7 +6,7 @@
     <!-- Title Page -->  
     <title>LISTO!!!!!!</title>
  
-    <!-- CSS -->
+    Hola esta es la pagina de inicio de estudiante
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/styles.css"> 

@@ -4,7 +4,12 @@
 	<title>Seleccion</title>
 </head>
 <body>
- <a href="{{route('student')}}" type="button">Estudiante</a>
- <a href="{{route('profesor')}}" type="button">Profesor</a>
+	 @if (isset($token))
+
+		 {{$token}}
+		 <a href="{{route('student',$token)}}" type="button">Estudiante</a>
+	 	 <a href="{{route('profesor')}}" type="button">Profesor</a>
+	 @endif
+ 
 </body>
 </html>

@@ -6,6 +6,9 @@
 <body>
 	<form method="post" action="{{route('saveStudent')}}" enctype="multipart/form-data">
 	{{csrf_field()}}
+		@if (isset($token))
+		 <input type="hidden" name="token" value="{{$token}}">
+		@endif
 		<p>carrera: <input type="text" name="carrera" required></p>
 		<p>matricula: <input type="text" name="matricula" required></p>
 		<p>nickname: <input type="text" name="nickname" required></p>

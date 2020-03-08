@@ -20,7 +20,9 @@ event(new App\Events\Myevent('my-event'));
     
 });
 
-
+Route::get('/homeStudent', function () {
+    return view('homestudent');
+});
 Route::post('/registroalumnomovil','ApiController@registroalumnomovil');
 Route::post('/verificarregistro','ApiController@verificarregistro');
 Route::post('/verificarconexion','ApiController@verificarconexion');
@@ -31,8 +33,8 @@ Route::get('login/gmail','ApiController@redirectToNetwork')->name('login');
 
 Route::get('login/gmail/callback', 'ApiController@handleCallback');
 
-Route::get('/student',function(){
-	return view('formestudiante');
+Route::get('/student/{token}',function($token){
+	return view('formestudiante',compact('token'));
 })->name('student');
 
 Route::post('/saveStudent','ApiController@registroalumnoweb')->name('saveStudent');
