@@ -41,8 +41,8 @@ Route::post('/saveStudent','ApiController@registroalumnoweb')->name('saveStudent
 
 
 
-Route::get('/profesor',function(){
-	return view('formprofesor');
+Route::get('/profesor/{token}',function($token){
+	return view('formprofesor',compact('token'));
 })->name('profesor');
 
 Route::post('/saveProfesor','ApiController@registroprofesorweb')->name('saveProfesor');

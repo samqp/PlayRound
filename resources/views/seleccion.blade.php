@@ -6,9 +6,9 @@
 <body>
 	 @if (isset($token))
 
-		 {{$token}}
+		
 		 <a href="{{route('student',$token)}}" type="button">Estudiante</a>
-	 	 <a href="{{route('profesor')}}" type="button">Profesor</a>
+	 	 <a href="{{route('profesor',$token)}}" type="button">Profesor</a>
 	 @endif
  
 </body>
